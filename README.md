@@ -6,6 +6,11 @@ A new Flutter project.
 
 This project is a starting point for a Flutter application.
 
+
+https://github.com/AdhilKurikkal/SneakX/blob/0fd3e21e573fe21ab5b0d55abe2d0feac0a1a561/preview1shoeapp.png
+https://github.com/AdhilKurikkal/SneakX/blob/0fd3e21e573fe21ab5b0d55abe2d0feac0a1a561/preview2shoeapp.png
+
+
 A few resources to get you started if this is your first Flutter project:
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
