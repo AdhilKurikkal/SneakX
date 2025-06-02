@@ -9,8 +9,10 @@ import 'package:sneakx/core/constants/svg.dart';
 
 import 'package:sneakx/data/models/product_model.dart';
 import 'package:sneakx/domain/providers/cart_provider.dart';
+import 'package:sneakx/domain/providers/favorite_provider.dart';
 import 'package:sneakx/domain/providers/product_provider.dart';
 import 'package:sneakx/presentation/view/cart/cart.dart';
+import 'package:sneakx/presentation/view/favorite/favorite.dart';
 
 class ProductDetail extends ConsumerWidget {
   final ShoeModel shoe;
@@ -22,7 +24,9 @@ class ProductDetail extends ConsumerWidget {
     // final selectImage = ref.read(selectimgProvider.notifier);
     //
     final selectSize = ref.watch(selectsizeProvider);
+
     //
+    final isFav = ref.watch(favoriteProvider).contains(shoe);
     ref.watch(cartProvider);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -40,6 +44,16 @@ class ProductDetail extends ConsumerWidget {
               },
               child: SvgPicture.asset(SvgImg.cart),
             ),
+          ),
+          SizedBox(width: 5),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FavoritePage()),
+              );
+            },
+            child: Icon(Icons.favorite, color: Colors.red),
           ),
         ],
       ),
@@ -209,32 +223,37 @@ class ProductDetail extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              Container(
-                height: 60,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Favorite',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+              GestureDetector(
+                onTap: () {
+                  ref.read(favoriteProvider.notifier).toggleFavorite(shoe);
+                },
+                child: Container(
+                  height: 60,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        isFav ? 'Added to favorites ' : 'Favorite',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 5),
-                    Icon(
-                      Icons.favorite_border_outlined,
-                      color: Colors.black,
-                      size: 20,
-                    ),
-                  ],
+                      SizedBox(width: 5),
+                      Icon(
+                        isFav ? Icons.favorite : Icons.favorite_border_outlined,
+                        color: isFav ? Colors.red : Colors.black,
+                        size: 20,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

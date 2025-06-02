@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sneakx/core/constants/color.dart';
 import 'package:sneakx/core/constants/font.dart';
 import 'package:sneakx/core/constants/svg.dart';
 import 'package:sneakx/core/utils/screen_size.dart';
 import 'package:sneakx/data/models/product_model.dart';
+import 'package:sneakx/domain/providers/favorite_provider.dart';
 import 'package:sneakx/presentation/view/product/product_detail.dart';
 import 'package:sneakx/presentation/widget/clipper_cart.dart';
 import 'package:sneakx/presentation/widget/custom_clipper.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends ConsumerWidget {
   final ShoeModel shoes;
   final int index;
 
   const ProductCard({super.key, required this.index, required this.shoes});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     //
 
     //
@@ -28,7 +30,7 @@ class ProductCard extends StatelessWidget {
         isEven
             ? const EdgeInsets.only(top: 5, right: 20)
             : const EdgeInsets.only(top: 25, left: 20);
-
+    final isFav = ref.watch(favoriteProvider).contains(shoes);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -142,9 +144,14 @@ class ProductCard extends StatelessWidget {
           bottom: isEven ? null : 25,
           right: isEven ? 5 : null,
           left: isEven ? null : 5,
-          child: const Icon(
-            Icons.favorite_border_outlined,
-            color: Colors.black,
+          child: GestureDetector(
+            onTap: () {
+              ref.read(favoriteProvider.notifier).toggleFavorite(shoes);
+            },
+            child: Icon(
+              isFav ? Icons.favorite : Icons.favorite_border_outlined,
+              color: isFav ? Colors.red : Colors.black,
+            ),
           ),
         ),
       ],
